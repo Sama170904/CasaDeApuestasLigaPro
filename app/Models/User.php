@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Evento;
+use App\Models\Apuesta;
 
 class User extends Authenticatable
 {
@@ -21,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol', // 👈 agrega esto si piensas usar create() o update() con el campo rol
     ];
 
     /**
@@ -41,4 +44,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // ➕ Relaciones personalizadas
+
+    public function apuestas()
+    {
+        return $this->hasMany(Apuesta::class);
+    }
+
+    public function eventosCreados()
+    {
+        return $this->hasMany(Evento::class, 'creado_por');
+    }
 }
