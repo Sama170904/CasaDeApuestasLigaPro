@@ -21,9 +21,10 @@ Route::get('/', [EventoController::class, 'index'])->name('inicio');
 Route::middleware(['auth'])->group(function () {
 
     // Panel principal del usuario autenticado
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [ApuestaController::class, 'dashboard'])
+        ->middleware(['auth'])
+        ->name('dashboard');
+
 
     // Rutas para gestionar eventos (solo para administradores o usuarios con permisos)
     Route::resource('eventos', EventoController::class);
@@ -34,6 +35,17 @@ Route::middleware(['auth'])->group(function () {
     // Procesar formulario de apuesta
     Route::post('/apostar/{evento}', [ApuestaController::class, 'store'])->name('apostar.guardar');
 });
+
+Route::middleware(['auth', 'es_admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/eventos/create', [EventoController::class, 'create'])->name('admin.eventos.create');
+    Route::post('/eventos', [EventoController::class, 'store'])->name('admin.eventos.store');
+    Route::get('/eventos/{id}/edit', [EventoController::class, 'edit'])->name('admin.eventos.edit');
+    Route::put('/eventos/{id}', [EventoController::class, 'update'])->name('admin.eventos.update');
+    Route::delete('/eventos/{id}', [EventoController::class, 'destroy'])->name('admin.eventos.destroy');
+    Route::put('/eventos/{id}/finalizar', [EventoController::class, 'finalizar'])->name('admin.eventos.finalizar');
+});
+
 
 // Rutas de autenticación (login, register, etc.)
 require __DIR__.'/auth.php';

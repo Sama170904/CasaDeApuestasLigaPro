@@ -9,15 +9,40 @@ use Illuminate\Support\Facades\Auth;
 
 class ApuestaController extends Controller
 {
+
     public function dashboard()
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
-        // Cargar las apuestas del usuario con info del evento y equipos
-        $apuestas = $user->apuestas()->with(['evento.equipo_local', 'evento.equipo_visitante'])->get();
+        if ($user->rol === 'admin') {
+            // Traer eventos pendientes (por ejemplo, los que no están finalizados)
+            $eventos_pendientes = Evento::with(['equipo_local', 'equipo_visitante'])
+                ->where('estado', 'pendiente') // o la condición que tengas para eventos pendientes
+                ->get();
 
-        return view('dashboard', compact('apuestas'));
+            return view('dashboard', compact('eventos_pendientes'));
+        } else {
+            // Lógica para usuarios normales (tokens, apuestas, etc)
+            $apuestas_pendientes = $user->apuestas()
+                ->with(['evento.equipo_local', 'evento.equipo_visitante'])
+                ->whereHas('evento', function ($query) {
+                    $query->where('fecha_evento', '>', now());
+                })->get();
+
+            $apuestas_realizadas = $user->apuestas()
+                ->with(['evento.equipo_local', 'evento.equipo_visitante'])
+                ->whereHas('evento', function ($query) {
+                    $query->where('fecha_evento', '<=', now());
+                })->get();
+
+            $tokens = $user->tokens ?? 0;
+
+            return view('dashboard', compact('apuestas_pendientes', 'apuestas_realizadas', 'tokens'));
+        }
     }
+
+
+
 
     // Mostrar formulario para apostar en un evento específico
     public function apostar($id)
