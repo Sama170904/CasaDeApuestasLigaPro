@@ -6,6 +6,7 @@ use App\Models\Evento;
 use App\Models\Equipo;
 use Illuminate\Http\Request;
 
+
 class EventoController extends Controller
 {
     // Otros métodos...
@@ -98,6 +99,30 @@ public function update(Request $request, Evento $evento)
 
         return redirect()->route('admin.eventos.index')->with('success', 'Evento finalizado correctamente.');
     }
+
+    public function create()
+    {
+        $equipos = Equipo::all(); // o los que necesites
+        return view('eventos.create', compact('equipos'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'equipo_local_id' => 'required|exists:equipos,id',
+            'equipo_visitante_id' => 'required|exists:equipos,id|different:equipo_local_id',
+            'fecha_evento' => 'required|date',
+        ]);
+
+        Evento::create([
+            'equipo_local_id' => $request->equipo_local_id,
+            'equipo_visitante_id' => $request->equipo_visitante_id,
+            'fecha_evento' => $request->fecha_evento,
+            'estado' => 'pendiente',
+        ]);
+        return redirect()->route('dashboard')->with('success', 'Evento creado correctamente.');
+    }
+
 
 
 }
