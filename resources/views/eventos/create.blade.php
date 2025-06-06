@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <h1>Crear Nuevo Evento</h1>
 
-    <form action="{{ route('eventos.store') }}" method="POST" novalidate>
+    <form action="{{ route('admin.eventos.store') }}" method="POST">
         @csrf
 
         <!-- Selección Equipo Local -->
@@ -50,7 +50,7 @@
         <!-- Aquí puedes agregar más opciones para apostar si quieres -->
 
         <button type="submit" class="btn btn-success">Crear Evento</button>
-        <a href="{{ route('eventos.index') }}" class="btn btn-secondary">Cancelar</a>
+        <a href="{{ route('admin.eventos.index') }}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 @endsection

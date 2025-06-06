@@ -8,10 +8,18 @@ use Illuminate\Http\Request;
 
 class EventoController extends Controller
 {
+    // Método para la página pública (inicio)
     public function index()
     {
         $eventos = Evento::where('estado', 'pendiente')->orderBy('fecha_evento', 'asc')->get();
         return view('inicio', compact('eventos'));
+    }
+
+    // Nuevo método para el listado en panel admin
+    public function adminIndex()
+    {
+        $eventos = Evento::orderBy('fecha_evento', 'asc')->get();
+        return view('admin.eventos.index', compact('eventos'));
     }
 
     public function create()
@@ -33,16 +41,21 @@ class EventoController extends Controller
 
         Evento::create($validated);
 
-        return redirect()->route('eventos.index')->with('success', 'Evento creado correctamente.');
+        // Cambié redirect aquí para que use la ruta admin.eventos.index
+        return redirect()->route('admin.eventos.index')->with('success', 'Evento creado correctamente.');
     }
 
-    public function edit(Evento $evento)
+    public function edit($id)
     {
-        return view('eventos.edit', compact('evento'));
+        $evento = Evento::findOrFail($id);
+        $equipos = Equipo::all();
+        return view('eventos.edit', compact('evento', 'equipos'));
     }
 
-    public function update(Request $request, Evento $evento)
+    public function update(Request $request, $id)
     {
+        $evento = Evento::findOrFail($id);
+
         $validated = $request->validate([
             'equipo_local_id' => 'required|exists:equipos,id',
             'equipo_visitante_id' => 'required|exists:equipos,id|different:equipo_local_id',
@@ -52,13 +65,23 @@ class EventoController extends Controller
 
         $evento->update($validated);
 
-        return redirect()->route('eventos.index')->with('success', 'Evento actualizado correctamente.');
+        return redirect()->route('admin.dashboard')->with('success', 'Evento actualizado correctamente.');
     }
 
-    public function destroy(Evento $evento)
+    public function destroy($id)
     {
+        $evento = Evento::findOrFail($id);
         $evento->delete();
 
-        return redirect()->route('eventos.index')->with('success', 'Evento eliminado correctamente.');
+        return redirect()->route('admin.dashboard')->with('success', 'Evento eliminado correctamente.');
+    }
+
+    public function finalizar($id)
+    {
+        $evento = Evento::findOrFail($id);
+        $evento->estado = 'finalizado';
+        $evento->save();
+
+        return redirect()->route('admin.dashboard')->with('success', 'Evento finalizado correctamente.');
     }
 }
