@@ -14,7 +14,7 @@ Route::middleware(['auth'])->group(function () {
     // Apostar
     Route::get('/apostar/{evento}', [ApuestaController::class, 'apostar'])->name('apostar.form');
     Route::post('/apostar/{evento}', [ApuestaController::class, 'store'])->name('apostar.guardar');
-});
+}); 
 
 // Panel de administración
 Route::middleware(['auth', 'es_admin'])->prefix('admin')->group(function () {
