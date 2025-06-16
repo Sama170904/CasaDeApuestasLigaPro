@@ -16,6 +16,7 @@ class Apuesta extends Model
         'evento_id',
         'tipo_apuesta',
         'prediccion',
+        'cantidad',
         'es_correcta',
     ];
 

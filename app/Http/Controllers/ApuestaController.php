@@ -26,14 +26,15 @@ class ApuestaController extends Controller
             $apuestas_pendientes = $user->apuestas()
                 ->with(['evento.equipo_local', 'evento.equipo_visitante'])
                 ->whereHas('evento', function ($query) {
-                    $query->where('fecha_evento', '>', now());
+                    $query->where('estado', 'pendiente');
                 })->get();
 
             $apuestas_realizadas = $user->apuestas()
                 ->with(['evento.equipo_local', 'evento.equipo_visitante'])
                 ->whereHas('evento', function ($query) {
-                    $query->where('fecha_evento', '<=', now());
+                    $query->where('estado', 'finalizado');
                 })->get();
+
 
             $tokens = $user->tokens ?? 0;
 

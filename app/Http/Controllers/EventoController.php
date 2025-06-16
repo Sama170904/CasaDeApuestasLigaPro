@@ -55,14 +55,15 @@ public function update(Request $request, Evento $evento)
 
             switch ($apuesta->tipo_apuesta) {
                 case 'ganador':
+                    // prediccion será 'local', 'visitante' o 'empate'
                     $correcta = $apuesta->prediccion === $ganador;
                     break;
-                case 'empate':
-                    $correcta = $ganador === 'empate';
-                    break;
+
                 case 'marcador_exacto':
-                    $correcta = $apuesta->prediccion === "{$evento->marcador_local}-{$evento->marcador_visitante}";
+                    $prediccionEsperada = "{$evento->marcador_local}-{$evento->marcador_visitante}";
+                    $correcta = $apuesta->prediccion === $prediccionEsperada;
                     break;
+
                 case 'goles_totales':
                     $total = $evento->marcador_local + $evento->marcador_visitante;
                     $correcta = (int)$apuesta->prediccion === $total;
@@ -73,6 +74,7 @@ public function update(Request $request, Evento $evento)
             $apuesta->save();
         }
     }
+
 
     return redirect()->route('admin.dashboard')->with('success', 'Evento actualizado correctamente.');
 }

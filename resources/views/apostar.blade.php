@@ -38,8 +38,8 @@
                 <div class="mb-4 tipo-apuesta" id="opcion-ganador">
                     <label for="prediccion_ganador" class="form-label">¿Quién ganará?</label>
                     <select name="prediccion_ganador" class="form-select bg-dark text-light border-light">
-                        <option value="{{ $evento->equipo_local->id }}">{{ $evento->equipo_local->nombre }}</option>
-                        <option value="{{ $evento->equipo_visitante->id }}">{{ $evento->equipo_visitante->nombre }}</option>
+                        <option value="local">Gana {{ $evento->equipo_local->nombre }}</option>
+                        <option value="visitante">Gana {{ $evento->equipo_visitante->nombre }}</option>
                         <option value="empate">Empate</option>
                     </select>
                 </div>

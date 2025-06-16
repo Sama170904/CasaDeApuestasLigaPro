@@ -122,17 +122,12 @@
                         <strong>Predicción:</strong>
                         @if($apuesta->prediccion === 'empate')
                             Empate
+                        @elseif($apuesta->prediccion === 'local')
+                            {{ $apuesta->evento->equipo_local->nombre }}
+                        @elseif($apuesta->prediccion === 'visitante')
+                            {{ $apuesta->evento->equipo_visitante->nombre }}
                         @else
-                            {{ $apuesta->prediccion == $apuesta->evento->equipo_local->id ? $apuesta->evento->equipo_local->nombre : $apuesta->evento_visitante->nombre }}
-                        @endif
-                        <br>
-                        <strong>Resultado:</strong>
-                        @if(is_null($apuesta->es_correcta))
-                            <span class="badge bg-secondary">Pendiente</span>
-                        @elseif($apuesta->es_correcta)
-                            <span class="badge bg-success">Ganada</span>
-                        @else
-                            <span class="badge bg-danger">Perdida</span>
+                            {{ $apuesta->prediccion }} {{-- Por si acaso --}}
                         @endif
                     </div>
                 @empty
