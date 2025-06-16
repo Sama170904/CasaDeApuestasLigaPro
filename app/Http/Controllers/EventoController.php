@@ -72,6 +72,11 @@ public function update(Request $request, Evento $evento)
 
             $apuesta->es_correcta = $correcta;
             $apuesta->save();
+            if ($correcta) {
+                $ganancia = $apuesta->cantidad * $evento->cuota;
+                $apuesta->user->tokens += $ganancia;
+                $apuesta->user->save();
+            }
         }
     }
 

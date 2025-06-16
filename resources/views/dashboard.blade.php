@@ -129,7 +129,17 @@
                         @else
                             {{ $apuesta->prediccion }} {{-- Por si acaso --}}
                         @endif
+                        <br>
+                        <strong>Resultado:</strong>
+                        @if(is_null($apuesta->es_correcta))
+                            <span class="badge bg-secondary">Pendiente</span>
+                        @elseif((bool)$apuesta->es_correcta)
+                            <span class="badge bg-success">Ganada</span>
+                        @else
+                            <span class="badge bg-danger">Perdida</span>
+                        @endif
                     </div>
+
                 @empty
                     <p class="text-muted">Aún no tienes apuestas finalizadas.</p>
                 @endforelse
