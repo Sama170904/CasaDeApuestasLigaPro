@@ -36,6 +36,7 @@ class ApuestaController extends Controller
                 })->get();
 
 
+
             $tokens = $user->tokens ?? 0;
 
             return view('dashboard', compact('apuestas_pendientes', 'apuestas_realizadas', 'tokens'));

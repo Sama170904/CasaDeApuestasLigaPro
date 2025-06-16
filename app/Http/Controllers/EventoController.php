@@ -64,7 +64,7 @@ public function update(Request $request, Evento $evento)
                     $correcta = $apuesta->prediccion === $prediccionEsperada;
                     break;
 
-                case 'goles_totales':
+                case 'goles':
                     $total = $evento->marcador_local + $evento->marcador_visitante;
                     $correcta = (int)$apuesta->prediccion === $total;
                     break;
@@ -72,13 +72,9 @@ public function update(Request $request, Evento $evento)
 
             $apuesta->es_correcta = $correcta;
             $apuesta->save();
-            if ($correcta) {
-                $ganancia = $apuesta->cantidad * $evento->cuota;
-                $apuesta->user->tokens += $ganancia;
-                $apuesta->user->save();
-            }
         }
     }
+
 
 
     return redirect()->route('admin.dashboard')->with('success', 'Evento actualizado correctamente.');
