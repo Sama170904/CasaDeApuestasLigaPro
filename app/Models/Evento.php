@@ -19,12 +19,14 @@ class Evento extends Model
         'estado',
         'marcador_local',
         'marcador_visitante',
+        'cuota',
     ];
 
     // ✅ Casts para asegurar tipos correctos al guardar en base de datos
     protected $casts = [
         'marcador_local' => 'integer',
         'marcador_visitante' => 'integer',
+        'cuota' => 'float',
     ];
 
     // ✅ Relación con el equipo local

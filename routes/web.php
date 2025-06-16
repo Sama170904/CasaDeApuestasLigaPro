@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ApuestaController;
+use App\Http\Controllers\TokenController;
 
 // Página pública
 Route::get('/', [EventoController::class, 'index'])->name('inicio');
@@ -14,6 +15,9 @@ Route::middleware(['auth'])->group(function () {
     // Apostar
     Route::get('/apostar/{evento}', [ApuestaController::class, 'apostar'])->name('apostar.form');
     Route::post('/apostar/{evento}', [ApuestaController::class, 'store'])->name('apostar.guardar');
+    Route::get('/tokens/recargar', [TokenController::class, 'mostrarFormulario'])->name('tokens.recargar.form');
+    Route::get('/tokens/recargar', [TokenController::class, 'mostrarFormulario'])->name('tokens.recargar');
+    Route::post('/tokens/recargar', [TokenController::class, 'recargar'])->name('tokens.recargar.guardar');
 }); 
 
 // Panel de administración

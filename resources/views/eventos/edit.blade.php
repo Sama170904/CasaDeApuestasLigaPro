@@ -46,6 +46,13 @@
             </select>
         </div>
 
+        <!-- Campo de Cuota -->
+        <div class="mb-3">
+            <label for="cuota" class="form-label">Cuota</label>
+            <input type="number" step="0.01" min="1" name="cuota" id="cuota" class="form-control"
+                value="{{ old('cuota', $evento->cuota) }}" required>
+        </div>
+
         <div id="resultado-fields">
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -72,11 +79,12 @@
         if (this.value === 'finalizado') {
             resultadoFields.style.display = 'block';
         } else {
-            resultadoFields.style.display = 'block'; // cambia a 'none' si quieres ocultar
+            resultadoFields.style.display = 'block'; // puedes cambiar a 'none' si quieres ocultar resultados
         }
     });
 </script>
 @endsection
+
 
 
 

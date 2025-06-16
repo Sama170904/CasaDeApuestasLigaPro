@@ -28,7 +28,9 @@ public function update(Request $request, Evento $evento)
         'estado' => 'required|in:pendiente,finalizado',
         'marcador_local' => 'nullable|integer|min:0',
         'marcador_visitante' => 'nullable|integer|min:0',
+        'cuota' => 'required|numeric|min:1',
     ]);
+
 
     // Asignar valores explícitamente, con casting correcto para marcadores
     $evento->equipo_local_id = $validated['equipo_local_id'];
@@ -37,6 +39,7 @@ public function update(Request $request, Evento $evento)
     $evento->estado = $validated['estado'];
     $evento->marcador_local = isset($validated['marcador_local']) ? (int)$validated['marcador_local'] : null;
     $evento->marcador_visitante = isset($validated['marcador_visitante']) ? (int)$validated['marcador_visitante'] : null;
+    $evento->cuota = $validated['cuota'];
 
     // Guardar actualización (NO crear nuevo registro)
     $evento->save();
@@ -112,6 +115,7 @@ public function update(Request $request, Evento $evento)
             'equipo_local_id' => 'required|exists:equipos,id',
             'equipo_visitante_id' => 'required|exists:equipos,id|different:equipo_local_id',
             'fecha_evento' => 'required|date',
+            'cuota' => 'required|numeric|min:1',
         ]);
 
         Evento::create([
@@ -119,9 +123,12 @@ public function update(Request $request, Evento $evento)
             'equipo_visitante_id' => $request->equipo_visitante_id,
             'fecha_evento' => $request->fecha_evento,
             'estado' => 'pendiente',
+            'cuota' => $request->cuota,
         ]);
+
         return redirect()->route('dashboard')->with('success', 'Evento creado correctamente.');
     }
+
 
 
 

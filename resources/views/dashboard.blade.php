@@ -83,6 +83,13 @@
             </div>
         </div>
 
+        <!-- Botón para recargar tokens -->
+        <div class="mb-4 text-center">
+            <a href="{{ route('tokens.recargar') }}" class="btn btn-success btn-lg">
+                Recargar Tokens
+            </a>
+        </div>
+
         <!-- Apuestas pendientes -->
         <div class="card bg-dark text-light mb-4 shadow-lg animate__animated animate__fadeIn">
             <div class="card-header bg-secondary text-white">Apuestas Pendientes</div>
@@ -116,7 +123,7 @@
                         @if($apuesta->prediccion === 'empate')
                             Empate
                         @else
-                            {{ $apuesta->prediccion == $apuesta->evento->equipo_local->id ? $apuesta->evento->equipo_local->nombre : $apuesta->evento->equipo_visitante->nombre }}
+                            {{ $apuesta->prediccion == $apuesta->evento->equipo_local->id ? $apuesta->evento->equipo_local->nombre : $apuesta->evento_visitante->nombre }}
                         @endif
                         <br>
                         <strong>Resultado:</strong>

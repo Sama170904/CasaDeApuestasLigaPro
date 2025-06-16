@@ -54,6 +54,17 @@
             @enderror
         </div>
 
+        <!-- Cuota -->
+        <div class="mb-4">
+            <label for="cuota" class="form-label">Cuota</label>
+            <input type="number" name="cuota" id="cuota"
+                class="form-control @error('cuota') is-invalid @enderror"
+                value="{{ old('cuota', 1.00) }}" min="1" step="0.01" required>
+            @error('cuota')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
         <!-- Botones -->
         <div class="d-flex justify-content-between mt-4">
             <button type="submit" class="btn btn-primary px-4 py-2">Crear Evento</button>
@@ -62,4 +73,5 @@
     </form>
 </div>
 @endsection
+
 

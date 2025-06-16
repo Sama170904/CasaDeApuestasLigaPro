@@ -57,6 +57,18 @@ class ApuestaController extends Controller
     {
         $user = Auth::user();
 
+        $request->validate([
+            'tipo_apuesta' => 'required|string',
+            'cantidad' => 'required|integer|min:1',
+        ]);
+
+        $cantidad = $request->input('cantidad');
+
+        // Verificar si el usuario tiene suficientes tokens
+        if (($user->tokens ?? 0) < $cantidad) {
+            return back()->withErrors(['cantidad' => 'No tienes suficientes tokens para apostar esa cantidad.'])->withInput();
+        }
+
         $tipo = $request->input('tipo_apuesta');
         $prediccion = '';
 
@@ -68,15 +80,22 @@ class ApuestaController extends Controller
             $prediccion = $request->input('total_goles');
         }
 
+        // Crear apuesta
         Apuesta::create([
             'user_id' => $user->id,
             'evento_id' => $evento->id,
             'tipo_apuesta' => $tipo,
             'prediccion' => $prediccion,
+            'cantidad' => $cantidad, // Asumiendo que tienes esta columna (de lo contrario, agregarla en migración)
         ]);
+
+        // Restar tokens apostados al usuario
+        $user->tokens -= $cantidad;
+        $user->save();
 
         return redirect()->route('dashboard')->with('success', '¡Apuesta registrada exitosamente!');
     }
+
 
     // Otros métodos que puedes usar después (por ahora puedes comentarlos si no los necesitas)
     /*
