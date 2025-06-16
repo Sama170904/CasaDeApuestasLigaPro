@@ -45,32 +45,37 @@ class ApuestaController extends Controller
 
 
     // Mostrar formulario para apostar en un evento específico
-    public function apostar($id)
+    public function apostar(Evento $evento)
     {
-        $evento = Evento::with(['equipo_local', 'equipo_visitante'])->findOrFail($id);
+        $evento->load(['equipo_local', 'equipo_visitante']);
         return view('apostar', compact('evento'));
     }
 
-    // Guardar una nueva apuesta
-    public function store(Request $request)
-    {
-        $request->validate([
-            'evento_id' => 'required|exists:eventos,id',
-            'tipo_apuesta' => 'required|in:ganador',
-            'prediccion' => 'required|string',
-        ]);
 
-        $prediccion = $request->prediccion === 'empate' ? 'empate' : intval($request->prediccion);
+    // Guardar una nueva apuesta
+    public function store(Request $request, Evento $evento)
+    {
+        $user = Auth::user();
+
+        $tipo = $request->input('tipo_apuesta');
+        $prediccion = '';
+
+        if ($tipo === 'ganador') {
+            $prediccion = $request->input('prediccion_ganador');
+        } elseif ($tipo === 'marcador_exacto') {
+            $prediccion = $request->input('goles_local') . '-' . $request->input('goles_visitante');
+        } elseif ($tipo === 'goles') {
+            $prediccion = $request->input('total_goles');
+        }
 
         Apuesta::create([
-            'user_id' => Auth::id(),
-            'evento_id' => $request->evento_id,
-            'tipo_apuesta' => $request->tipo_apuesta,
+            'user_id' => $user->id,
+            'evento_id' => $evento->id,
+            'tipo_apuesta' => $tipo,
             'prediccion' => $prediccion,
-            'es_correcta' => null,
         ]);
 
-        return redirect()->route('inicio')->with('success', '¡Apuesta registrada con éxito!');
+        return redirect()->route('dashboard')->with('success', '¡Apuesta registrada exitosamente!');
     }
 
     // Otros métodos que puedes usar después (por ahora puedes comentarlos si no los necesitas)

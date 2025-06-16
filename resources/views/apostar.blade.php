@@ -16,15 +16,39 @@
             <form action="{{ route('apostar.guardar', $evento->id) }}" method="POST">
                 @csrf
                 <input type="hidden" name="evento_id" value="{{ $evento->id }}">
-                <input type="hidden" name="tipo_apuesta" value="ganador">
 
                 <div class="mb-4">
-                    <label for="prediccion" class="form-label">¿Quién ganará?</label>
-                    <select name="prediccion" id="prediccion" class="form-select bg-dark text-light border-light" required>
+                    <label for="tipo_apuesta" class="form-label">Tipo de Apuesta</label>
+                    <select name="tipo_apuesta" id="tipo_apuesta" class="form-select bg-dark text-light border-light" required onchange="mostrarOpciones()">
+                        <option value="ganador">Ganador</option>
+                        <option value="marcador_exacto">Marcador Exacto</option>
+                        <option value="goles">Cantidad Total de Goles</option>
+                    </select>
+                </div>
+
+                <!-- Ganador -->
+                <div class="mb-4 tipo-apuesta" id="opcion-ganador">
+                    <label for="prediccion_ganador" class="form-label">¿Quién ganará?</label>
+                    <select name="prediccion_ganador" class="form-select bg-dark text-light border-light">
                         <option value="{{ $evento->equipo_local->id }}">{{ $evento->equipo_local->nombre }}</option>
                         <option value="{{ $evento->equipo_visitante->id }}">{{ $evento->equipo_visitante->nombre }}</option>
                         <option value="empate">Empate</option>
                     </select>
+                </div>
+
+                <!-- Marcador Exacto -->
+                <div class="mb-4 tipo-apuesta d-none" id="opcion-marcador">
+                    <label class="form-label">Marcador Exacto (Local - Visitante)</label>
+                    <div class="d-flex gap-2">
+                        <input type="number" min="0" name="goles_local" class="form-control bg-dark text-light" placeholder="Local">
+                        <input type="number" min="0" name="goles_visitante" class="form-control bg-dark text-light" placeholder="Visitante">
+                    </div>
+                </div>
+
+                <!-- Total de Goles -->
+                <div class="mb-4 tipo-apuesta d-none" id="opcion-goles">
+                    <label for="total_goles" class="form-label">Cantidad Total de Goles</label>
+                    <input type="number" min="0" name="total_goles" class="form-control bg-dark text-light" placeholder="Ej: 3">
                 </div>
 
                 <div class="text-center">
@@ -34,5 +58,17 @@
         </div>
     </div>
 </div>
+
+<script>
+function mostrarOpciones() {
+    const tipo = document.getElementById('tipo_apuesta').value;
+
+    document.querySelectorAll('.tipo-apuesta').forEach(div => div.classList.add('d-none'));
+    if (tipo === 'ganador') document.getElementById('opcion-ganador').classList.remove('d-none');
+    if (tipo === 'marcador_exacto') document.getElementById('opcion-marcador').classList.remove('d-none');
+    if (tipo === 'goles') document.getElementById('opcion-goles').classList.remove('d-none');
+}
+</script>
 @endsection
+
 
