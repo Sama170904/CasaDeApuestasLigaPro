@@ -72,6 +72,14 @@ public function update(Request $request, Evento $evento)
 
             $apuesta->es_correcta = $correcta;
             $apuesta->save();
+
+            // Si la apuesta fue correcta, devolver tokens con ganancia
+            if ($correcta) {
+                $usuario = $apuesta->user;
+                $ganancia = $apuesta->cantidad * $evento->cuota;
+                $usuario->tokens += (int) $ganancia;
+                $usuario->save();
+            }
         }
     }
 
@@ -101,10 +109,46 @@ public function update(Request $request, Evento $evento)
         $evento->estado = 'finalizado';
         $evento->save();
 
-        // Opcional: aquí podrías agregar lógica extra, como actualizar apuestas si quieres
+        // 👇 Esto es lo que debes copiar de tu método update()
+        if ($evento->marcador_local !== null && $evento->marcador_visitante !== null) {
+            $ganador = $evento->marcador_local > $evento->marcador_visitante
+                ? 'local'
+                : ($evento->marcador_local < $evento->marcador_visitante ? 'visitante' : 'empate');
+
+            foreach ($evento->apuestas as $apuesta) {
+                $correcta = false;
+
+                switch ($apuesta->tipo_apuesta) {
+                    case 'ganador':
+                        $correcta = $apuesta->prediccion === $ganador;
+                        break;
+
+                    case 'marcador_exacto':
+                        $prediccionEsperada = "{$evento->marcador_local}-{$evento->marcador_visitante}";
+                        $correcta = $apuesta->prediccion === $prediccionEsperada;
+                        break;
+
+                    case 'goles':
+                        $total = $evento->marcador_local + $evento->marcador_visitante;
+                        $correcta = (int)$apuesta->prediccion === $total;
+                        break;
+                }
+
+                $apuesta->es_correcta = $correcta;
+                $apuesta->save();
+
+                if ($correcta) {
+                    $usuario = $apuesta->user;
+                    $ganancia = $apuesta->cantidad * $evento->cuota;
+                    $usuario->tokens += (int) $ganancia;
+                    $usuario->save();
+                }
+            }
+        }
 
         return redirect()->route('admin.eventos.index')->with('success', 'Evento finalizado correctamente.');
     }
+
 
     public function create()
     {
