@@ -6,8 +6,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
-            <div class="card mt-5 shadow-sm">
-                <div class="card-header bg-primary text-white">
+            <div class="card bg-dark text-light mt-5 shadow-lg">
+                <div class="card-header bg-secondary text-white">
                     <h4 class="mb-0">Iniciar sesión</h4>
                 </div>
                 <div class="card-body">
@@ -16,21 +16,21 @@
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo Electrónico</label>
-                            <input id="email" type="email" 
-                                   class="form-control @error('email') is-invalid @enderror" 
+                            <input id="email" type="email"
+                                   class="form-control bg-dark text-light border-light @error('email') is-invalid @enderror"
                                    name="email" value="{{ old('email') }}" required autofocus>
                             @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback bg-danger text-white px-2 rounded">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña</label>
-                            <input id="password" type="password" 
-                                   class="form-control @error('password') is-invalid @enderror" 
+                            <input id="password" type="password"
+                                   class="form-control bg-dark text-light border-light @error('password') is-invalid @enderror"
                                    name="password" required autocomplete="current-password">
                             @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback bg-danger text-white px-2 rounded">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -39,15 +39,16 @@
                             <label class="form-check-label" for="remember">Recordarme</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                        <button type="submit" class="btn btn-outline-info w-100">Ingresar</button>
                     </form>
                 </div>
                 <div class="card-footer text-center">
-                    <small>¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate aquí</a></small>
+                    <small>¿No tienes cuenta? <a href="{{ route('register') }}" class="text-info">Regístrate aquí</a></small>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
 

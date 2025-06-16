@@ -46,7 +46,6 @@
             </select>
         </div>
 
-        {{-- Mostrar siempre los campos de marcador para que puedas ingresar marcador en cualquier estado --}}
         <div id="resultado-fields">
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -67,19 +66,17 @@
     </form>
 </div>
 
-{{-- Opcional: Mostrar u ocultar campos marcador si quieres con JS según estado --}}
 <script>
     document.getElementById('estado').addEventListener('change', function () {
         const resultadoFields = document.getElementById('resultado-fields');
-        // Aquí puedes decidir si ocultar o mostrar el marcador según el estado, o dejar siempre visible
-        // Ejemplo para ocultar si estado es pendiente:
         if (this.value === 'finalizado') {
             resultadoFields.style.display = 'block';
         } else {
-            resultadoFields.style.display = 'block'; // cambiar a 'none' si quieres ocultar en pendiente
+            resultadoFields.style.display = 'block'; // cambia a 'none' si quieres ocultar
         }
     });
 </script>
 @endsection
+
 
 

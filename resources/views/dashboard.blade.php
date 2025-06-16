@@ -5,11 +5,11 @@
 
     {{-- DASHBOARD DE ADMIN --}}
     @if(auth()->user()->rol === 'admin')
-        <h2 class="text-center mb-4">Panel de Administración</h2>
+        <h2 class="text-center mb-4 text-light animate__animated animate__fadeInDown">Panel de Administración</h2>
 
         <!-- Información personal -->
-        <div class="card mb-4 shadow">
-            <div class="card-header bg-primary text-white">Información Personal</div>
+        <div class="card bg-dark text-light mb-4 shadow-lg animate__animated animate__fadeIn">
+            <div class="card-header bg-secondary text-white">Información Personal</div>
             <div class="card-body">
                 <p><strong>Nombre:</strong> {{ auth()->user()->name }}</p>
                 <p><strong>Correo:</strong> {{ auth()->user()->email }}</p>
@@ -18,17 +18,17 @@
         </div>
 
         <!-- Botón para crear eventos -->
-        <div class="mb-4 text-center">
-            <a href="{{ route('admin.eventos.create') }}" class="btn btn-success btn-lg">+ Crear Nuevo Evento</a>
+        <div class="mb-4 text-center animate__animated animate__fadeInUp">
+            <a href="{{ route('admin.eventos.create') }}" class="btn btn-outline-info btn-lg">+ Crear Nuevo Evento</a>
         </div>
 
         <!-- Tabla de eventos pendientes -->
-        <div class="card shadow">
-            <div class="card-header bg-warning text-dark">Eventos Pendientes</div>
+        <div class="card bg-dark text-light shadow-lg animate__animated animate__fadeIn">
+            <div class="card-header bg-secondary text-white">Eventos Pendientes</div>
             <div class="card-body table-responsive">
                 @if($eventos_pendientes->count())
-                    <table class="table table-bordered table-striped">
-                        <thead>
+                    <table class="table table-dark table-hover table-bordered border-light">
+                        <thead class="table-dark">
                             <tr>
                                 <th>Equipos</th>
                                 <th>Fecha</th>
@@ -41,14 +41,14 @@
                                     <td>{{ $evento->equipo_local->nombre }} vs {{ $evento->equipo_visitante->nombre }}</td>
                                     <td>{{ \Carbon\Carbon::parse($evento->fecha_evento)->format('d/m/Y H:i') }}</td>
                                     <td>
-                                        <a href="{{ route('admin.eventos.edit', $evento->id) }}" class="btn btn-sm btn-primary">Editar</a>
+                                        <a href="{{ route('admin.eventos.edit', $evento->id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
                                         <form action="{{ route('admin.eventos.destroy', $evento->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este evento?')">Eliminar</button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar este evento?')">Eliminar</button>
                                         </form>
                                         <form action="{{ route('admin.eventos.finalizar', $evento->id) }}" method="POST" class="d-inline">
                                             @csrf @method('PUT')
-                                            <button class="btn btn-sm btn-success">Finalizar</button>
+                                            <button class="btn btn-sm btn-outline-success">Finalizar</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -63,11 +63,11 @@
 
     {{-- DASHBOARD DE USUARIO --}}
     @else
-        <h2 class="text-center mb-4">Dashboard de Usuario</h2>
+        <h2 class="text-center mb-4 text-light animate__animated animate__fadeInDown">Dashboard de Usuario</h2>
 
         <!-- Información personal -->
-        <div class="card mb-4 shadow">
-            <div class="card-header bg-primary text-white">Información Personal</div>
+        <div class="card bg-dark text-light mb-4 shadow-lg animate__animated animate__fadeIn">
+            <div class="card-header bg-secondary text-white">Información Personal</div>
             <div class="card-body">
                 <p><strong>Nombre:</strong> {{ auth()->user()->name }}</p>
                 <p><strong>Correo:</strong> {{ auth()->user()->email }}</p>
@@ -76,19 +76,19 @@
         </div>
 
         <!-- Tokens disponibles -->
-        <div class="card mb-4 shadow">
-            <div class="card-header bg-success text-white">Tokens Disponibles</div>
+        <div class="card bg-dark text-light mb-4 shadow-lg animate__animated animate__fadeIn">
+            <div class="card-header bg-secondary text-white">Tokens Disponibles</div>
             <div class="card-body text-center">
-                <h1 class="display-4 text-success">{{ $tokens }}</h1>
+                <h1 class="display-4 text-info">{{ $tokens }}</h1>
             </div>
         </div>
 
         <!-- Apuestas pendientes -->
-        <div class="card mb-4 shadow">
-            <div class="card-header bg-warning text-dark">Apuestas Pendientes</div>
+        <div class="card bg-dark text-light mb-4 shadow-lg animate__animated animate__fadeIn">
+            <div class="card-header bg-secondary text-white">Apuestas Pendientes</div>
             <div class="card-body">
                 @forelse($apuestas_pendientes as $apuesta)
-                    <div class="border-bottom pb-2 mb-3">
+                    <div class="border-bottom border-secondary pb-2 mb-3">
                         <strong>Evento:</strong> {{ $apuesta->evento->equipo_local->nombre }} vs {{ $apuesta->evento->equipo_visitante->nombre }}<br>
                         <strong>Fecha:</strong> {{ \Carbon\Carbon::parse($apuesta->evento->fecha_evento)->format('d/m/Y H:i') }}<br>
                         <strong>Predicción:</strong>
@@ -105,11 +105,11 @@
         </div>
 
         <!-- Apuestas realizadas -->
-        <div class="card mb-4 shadow">
-            <div class="card-header bg-info text-white">Apuestas Realizadas</div>
+        <div class="card bg-dark text-light mb-4 shadow-lg animate__animated animate__fadeIn">
+            <div class="card-header bg-secondary text-white">Apuestas Realizadas</div>
             <div class="card-body">
                 @forelse($apuestas_realizadas as $apuesta)
-                    <div class="border-bottom pb-2 mb-3">
+                    <div class="border-bottom border-secondary pb-2 mb-3">
                         <strong>Evento:</strong> {{ $apuesta->evento->equipo_local->nombre }} vs {{ $apuesta->evento->equipo_visitante->nombre }}<br>
                         <strong>Fecha:</strong> {{ \Carbon\Carbon::parse($apuesta->evento->fecha_evento)->format('d/m/Y H:i') }}<br>
                         <strong>Predicción:</strong>
@@ -136,4 +136,6 @@
     @endif
 </div>
 @endsection
+
+
 
