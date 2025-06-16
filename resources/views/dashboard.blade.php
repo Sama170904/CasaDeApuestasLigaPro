@@ -101,8 +101,12 @@
                         <strong>Predicción:</strong>
                         @if($apuesta->prediccion === 'empate')
                             Empate
+                        @elseif($apuesta->prediccion === 'local')
+                            {{ $apuesta->evento->equipo_local->nombre }}
+                        @elseif($apuesta->prediccion === 'visitante')
+                            {{ $apuesta->evento->equipo_visitante->nombre }}
                         @else
-                            {{ $apuesta->prediccion == $apuesta->evento->equipo_local->id ? $apuesta->evento->equipo_local->nombre : $apuesta->evento->equipo_visitante->nombre }}
+                            {{ $apuesta->prediccion }} {{-- fallback de seguridad --}}
                         @endif
                     </div>
                 @empty
